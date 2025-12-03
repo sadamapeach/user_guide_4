@@ -431,7 +431,7 @@ data = [
 ]
 df_merge = pd.DataFrame(data, columns=columns)
 
-num_cols = ["Price (IDR)"]
+num_cols = ["Vendor A", "Vendor B", "Vendor C"]
 df_merge_styled = (
     df_merge.style
     .format({col: format_rupiah for col in num_cols})
@@ -506,7 +506,7 @@ data = [
 ]
 df_summary = pd.DataFrame(data, columns=columns)
 
-num_cols = ["REGION 1", "REGION 2", "TOTAL"]
+num_cols = ["PRICE"]
 df_summary_styled = (
     df_summary.style
     .format({col: format_rupiah for col in num_cols})
@@ -585,7 +585,7 @@ data = [
 ]
 df_analysis = pd.DataFrame(data, columns=columns)
 
-num_cols = ["VENDOR A", "VENDOR B", "VENDOR C", "1st Lowest", "2nd Lowest", "Median Price"]
+num_cols = ["Vendor A", "Vendor B", "Vendor C", "1st Lowest", "2nd Lowest", "Median Price"]
 df_analysis_styled = (
     df_analysis.style
     .format({col: format_rupiah for col in num_cols})
