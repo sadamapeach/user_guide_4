@@ -372,7 +372,6 @@ def red_highlight(row):
         return ["color: #FF4D4D;" for _ in row]
     return [""] * len(row)
 
-num_cols = ["Y0", "Y1", "Y2", "Y3", "TOTAL 3Y TCO"]
 df_styled = df.style.apply(red_highlight, axis=1)
 
 st.dataframe(df_styled, hide_index=True)
@@ -385,7 +384,7 @@ st.markdown(
             <span style="color: #FF69B4; font-weight: 700;">not permitted</span>! 
             The total row is generated automatically during
             <span style="font-weight: 700;">MERGE DATA</span> — 
-            do not add one manually, or it will be treated as part of the scope and included in calculations.
+            do not add one manually, or it will be treated as part of the description and included in calculations.
         </div>
     """,
     unsafe_allow_html=True
@@ -664,7 +663,9 @@ data = [
     ["Vendor C", "Software", 11000,9570,13960,11560,-560,"-5.1%","Fluctuating",1583.3568,"38.1%"],
     ["Vendor C", "TOTAL", 34000,26550,42550,38070,"","","","",""],
 ]
+
 df_pmove = pd.DataFrame(data, columns=columns)
+df_pmove = df_pmove.map(lambda x: None if x == "" else x)
 
 num_cols = ["Round 1", "Round 2", "Round 3", "Round 4", "PRICE REDUCTION (VALUE)", "STANDARD DEVIATION"]
 df_pmove_styled = (
