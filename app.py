@@ -134,8 +134,7 @@ st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 20px">
             The system accommodates a 
-            <span style="font-weight: bold;">dynamic table</span>,
-            allowing users to enter any number of non-numeric and numeric columns. 
+            <span style="font-weight: bold;">dynamic table</span>, allowing users to enter any number of non-numeric and numeric columns. 
             Users have the freedom to name the columns as they wish. The system logic relies on 
             <span style="font-weight: bold;">column indices</span>,
             not specific column names.
@@ -148,10 +147,8 @@ st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 20px">
             Originally, the table included a 
-            <span style="background:#FFCB09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">TOTAL ROW</span>
-            because this menu is an extension of the 
-            <span style="color: #FF69B4; font-weight: 700;">'TCO Comparison by Year → TCO Summary'</span>
-            menu, which analyzed price trends across rounds. However, you are allowed to 
+            <span style="background:#FFCB09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">TOTAL ROW</span> because this menu is an extension of the 
+            <span style="color: #FF69B4; font-weight: 700;">'TCO Comparison by Year → TCO Summary'</span> menu, which analyzed price trends across rounds. However, you are allowed to 
             <span style="color: #ED1C24; font-weight: 700;">EXCLUDE</span> 
             the TOTAL row, since the system will automatically generate its own TOTAL row.
         </div>
@@ -176,11 +173,11 @@ st.markdown("**:red-badge[1. MULTIPLE FILE NAME]**")
 st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 15px; margin-top: -10px">
-            This menu operates using <span style="color: #FF69B4; font-weight: 500;">multiple files</span>, 
-            where each filename is extracted and used as the value for the <span style="background:#FFCB09; 
-            padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">ROUND</span>
-            column. Therefore, please ensure that each filename correctly represents its corresponding round 
-            and <span style="color: #ED1C24; font-weight: bold;">AVOID</span> using ambiguous names.
+            This menu operates using 
+            <span style="color: #FF69B4; font-weight: 500;">multiple files</span>, where each filename is extracted and used as the value for the 
+            <span style="background:#FFCB09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">ROUND</span> column. 
+            Therefore, please ensure that each filename correctly represents its corresponding round and 
+            <span style="color: #ED1C24; font-weight: bold;">AVOID</span> using ambiguous names.
         </div>
     """,
     unsafe_allow_html=True
@@ -189,8 +186,9 @@ st.markdown(
 st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 10px;">
-            Because the filenames are parsed into a non-numeric column, the system uses <span style="color: #FF69B4; 
-            font-weight: 700;">REGEX</span> to detect and sort the rounds in the correct order. For example:
+            Because the filenames are parsed into a non-numeric column, the system uses 
+            <span style="color: #FF69B4; font-weight: 700;">REGEX</span> to detect and sort the rounds in the correct order. 
+            For example:
         </div>
     """,
     unsafe_allow_html=True
@@ -234,8 +232,7 @@ st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 25px;">
             Because the order of the rounds directly affects the analysis of 
-            <span style="color: #69FFB4; font-weight: 700;">PRICE MOVEMENT</span>.
-            It is highly recommended to use clear and consistent naming, such as 
+            <span style="color: #69FFB4; font-weight: 700;">PRICE MOVEMENT</span>. It is highly recommended to use clear and consistent naming, such as 
             <span style="background:#FF9A09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">Round 1</span>
             <span style="background:#FF9A09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">Round 2</span> 
             and so on.
@@ -298,11 +295,12 @@ st.dataframe(df, hide_index=True)
 st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 25px; margin-top: -5px;">
-            The table above is an <span style="color: #FF69B4; font-weight: 700;">incorrect example</span>
-            and is <span style="color: #FF69B4; font-weight: 700;">not allowed</span> because it contains 
-            a <span style="font-weight: bold;">"No"</span> column. The "No" column is prohibited in this
-            menu, as it will be treated as a numeric column by the system, which violates the constraint
-            described in point 2.
+            The table above is an 
+            <span style="color: #FF69B4; font-weight: 700;">incorrect example</span> and is 
+            <span style="color: #FF69B4; font-weight: 700;">not allowed</span> because it contains a 
+            <span style="font-weight: bold;">"No"</span> column. 
+            The "No" column is prohibited in this menu, as it will be treated as a numeric column by the system, 
+            which violates the constraint described in point 2.
         </div>
     """,
     unsafe_allow_html=True
@@ -312,9 +310,9 @@ st.markdown("**:blue-badge[4. FLOATING TABLE]**")
 st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 10px; margin-top:-10px;">
-            Floating tables are allowed, meaning tables <span style="color: #FF69B4; font-weight: 700;">
-            do not need to start from cell A1</span>. However, ensure
-            that the cells above and to the left of the table are empty, as shown in the example below:
+            Floating tables are allowed, meaning tables 
+            <span style="color: #FF69B4; font-weight: 700;">do not need to start from cell A1</span>. 
+            However, ensure that the cells above and to the left of the table are empty, as shown in the example below:
         </div>
     """,
     unsafe_allow_html=True
@@ -348,7 +346,50 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-st.markdown("**:violet-badge[Unlike the 'TCO Comparison by Year' menu, you are NOT allowed to add a TOTAL column as the last column!]**")
+st.markdown("**:violet-badge[5. TOTAL ROW]**")
+st.markdown(
+    """
+        <div style="text-align: justify; font-size: 15px; margin-bottom: 10px; margin-top:-10px;">
+            You are not allowed to add a 
+            <span style="font-weight: 700;">TOTAL</span> row at the bottom of the table! 
+            Please refer to the example table below:
+        </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# DataFrame
+columns = ["Desc", "Vendor A", "Vendor B", "Vendor C"]
+data = [
+    ["Optical Cable", "1.000", "2.000", "3.000"],
+    ["Cross Connect", "5.000", "4.800", "4.600"],
+    ["TOTAL", "6.000", "6.800", "7.600"],
+]
+df = pd.DataFrame(data, columns=columns)
+
+def red_highlight(row):
+    if row["Desc"] == "TOTAL":
+        return ["color: #FF4D4D;" for _ in row]
+    return [""] * len(row)
+
+num_cols = ["Y0", "Y1", "Y2", "Y3", "TOTAL 3Y TCO"]
+df_styled = df.style.apply(red_highlight, axis=1)
+
+st.dataframe(df_styled, hide_index=True)
+
+st.markdown(
+    """
+        <div style="text-align: justify; font-size: 15px; margin-bottom: 20px; margin-top: -5px;">
+            The table above is an 
+            <span style="color: #FF69B4; font-weight: 700;">incorrect example</span> and is 
+            <span style="color: #FF69B4; font-weight: 700;">not permitted</span>! 
+            The total row is generated automatically during
+            <span style="font-weight: 700;">MERGE DATA</span> — 
+            do not add one manually, or it will be treated as part of the scope and included in calculations.
+        </div>
+    """,
+    unsafe_allow_html=True
+)
 
 st.divider()
 
@@ -382,7 +423,7 @@ def release_the_balloons():
 st.download_button(
     label="Dummy Dataset",
     data=zip_buffer,
-    file_name="dummy_dataset.zip",
+    file_name="Dummy Dataset - TCO Comparison Round by Round.zip",
     mime="application/zip",
     on_click=release_the_balloons,
     type="primary",
@@ -832,7 +873,7 @@ if selected_sheets:
     st.download_button(
         label="Download",
         data=excel_bytes,
-        file_name="super botton.xlsx",
+        file_name="Super Botton - TCO Comparison Round by Round.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         type="primary",
         use_container_width=True,
