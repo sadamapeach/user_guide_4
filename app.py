@@ -27,27 +27,32 @@ def format_rupiah(x):
     return formatted
 
 def highlight_total(row):
-    # Cek apakah ada kolom yang berisi "TOTAL" (case-insensitive)
     if any(str(x).strip().upper() == "TOTAL" for x in row):
         return ["font-weight: bold; background-color: #D9EAD3; color: #1A5E20;"] * len(row)
     else:
         return [""] * len(row)
     
-def highlight_1st_2nd_vendor(row, columns):
+def highlight_1st_2nd(row, columns):
     styles = [""] * len(columns)
     first_vendor = row.get("1st Vendor")
     second_vendor = row.get("2nd Vendor")
 
     for i, col in enumerate(columns):
         if col == first_vendor:
-            # styles[i] = "background-color: #f8c8dc; color: #7a1f47;"
             styles[i] = "background-color: #C6EFCE; color: #006100;"
         elif col == second_vendor:
-            # styles[i] = "background-color: #d7c6f3; color: #402e72;"
             styles[i] = "background-color: #FFEB9C; color: #9C6500;"
     return styles
 
-st.subheader("🧑‍🏫 User Guide: TCO Comparison Round by Round")
+st.markdown(
+    """
+    <div style="font-size:1.75rem; font-weight:700; margin-bottom:9px">
+        🧑‍🏫 User Guide: TCO Comparison Round by Round
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown(
     ":red-badge[Indosat] :orange-badge[Ooredoo] :green-badge[Hutchison]"
 )
@@ -611,25 +616,32 @@ st.markdown(
 # DataFrame
 columns = ["ROUND", "TCO Component", "Vendor A", "Vendor B", "Vendor C", "1st Lowest", "1st Vendor", "2nd Lowest", "2nd Vendor", "Gap 1 to 2 (%)", "Median Price", "Vendor A to Median (%)", "Vendor B to Median (%)", "Vendor C to Median (%)"]
 data = [
-    ["Round 1", "Software", 12000,13500,11000,11000,"Vendor C",12000,"Vendor A", "9.1%",12000, "+0.0%", "+12.5%", "-8.3%"],
-    ["Round 1", "Hardware", 25000,24000,23000,23000,"Vendor C",24000,"Vendor B", "4.3%",24000, "+4.2%", "+0.0%", "-4.2%"],
+    ["Round 1", "Software", 12000,13500,11000,11000,"Vendor C",12000,"Vendor A", 9.1, 12000, 0, 12.5, -8.3],
+    ["Round 1", "Hardware", 25000,24000,23000,23000,"Vendor C",24000,"Vendor B", 4.3, 24000, 4.2, 0, -4.2],
 
-    ["Round 2", "Software", 9850,10230,9570,9570,"Vendor C",9850,"Vendor A", "2.9%",9850, "+0.0%", "+3.9%", "-2.8%"],
-    ["Round 2", "Hardware", 18020,17590,16980,16980,"Vendor C",17590,"Vendor B", "3.6%",17590, "+2.4%", "+0.0%",  "-3.5%"],
+    ["Round 2", "Software", 9850,10230,9570,9570,"Vendor C",9850,"Vendor A", 2.9, 9850, 0, 3.9, -2.8],
+    ["Round 2", "Hardware", 18020,17590,16980,16980,"Vendor C",17590,"Vendor B", 3.6, 17590, 2.4, 0, -3.5],
 
-    ["Round 3", "Software", 14530,15210,13960,13960,"Vendor C",14530,"Vendor A", "4.1%",14530, "+0.0%", "+4.7%", "-3.9%"],
-    ["Round 3", "Hardware", 31080,29840,28590,28590,"Vendor C",29840,"Vendor B", "4.4%",29840, "+4.2%", "+0.0%",  "-4.2%"],
+    ["Round 3", "Software", 14530,15210,13960,13960,"Vendor C",14530,"Vendor A", 4.1, 14530, 0, 4.7, -3.9],
+    ["Round 3", "Hardware", 31080,29840,28590,28590,"Vendor C",29840,"Vendor B", 4.4, 29840, 4.2, 0, -4.2],
 
-    ["Round 4", "Software", 13420,12090,11560,11560,"Vendor C",12090,"Vendor B", "4.6%",12090, "+11.0%", "+0.0%",  "-4.4%"],
-    ["Round 4", "Hardware", 19570,27840,26510,19570,"Vendor A",26510,"Vendor C", "35.5%",26510, "-26.2%", "+5.0%", "+0.0%"],
+    ["Round 4", "Software", 13420,12090,11560,11560,"Vendor C",12090,"Vendor B", 4.6, 12090, 11, 0, -4.4],
+    ["Round 4", "Hardware", 19570,27840,26510,19570,"Vendor A",26510,"Vendor C", 35.5, 26510, -26.2, 5, 0],
 ]
 df_analysis = pd.DataFrame(data, columns=columns)
 
 num_cols = ["Vendor A", "Vendor B", "Vendor C", "1st Lowest", "2nd Lowest", "Median Price"]
+format_dic = {col: format_rupiah for col in num_cols}
+format_dic.update({"Gap 1 to 2 (%)": "{:.1f}%"})
+
+vendor_cols = ["Vendor A", "Vendor B", "Vendor C"]
+for v in vendor_cols:
+    format_dic[f"{v} to Median (%)"] = "{:+.1f}%"
+
 df_analysis_styled = (
     df_analysis.style
-    .format({col: format_rupiah for col in num_cols})
-    .apply(lambda row: highlight_1st_2nd_vendor(row, df_analysis.columns), axis=1)
+    .format(format_dic)
+    .apply(lambda row: highlight_1st_2nd(row, df_analysis.columns), axis=1)
 )
 
 st.dataframe(df_analysis_styled, hide_index=True)
@@ -651,16 +663,16 @@ st.markdown(
 # DataFrame
 columns = ["VENDOR", "TCO Component", "Round 1", "Round 2", "Round 3", "Round 4", "PRICE REDUCTION (VALUE)", "PRICE REDUCTION (%)", "PRICE TREND", "STANDARD DEVIATION", "PRICE STABILITY INDEX (%)"]
 data = [
-    ["Vendor A", "Hardware", 25000,18020,31080,19570,5430,"+21.7%","Fluctuating",5127.2428,"55.8%"],
-    ["Vendor A", "Software", 12000,9850,14530,13420,-1420,"-11.8%","Fluctuating",1748.5565,"37.6%"],
+    ["Vendor A", "Hardware", 25000,18020,31080,19570,5430,21.7,"Fluctuating",5127.2428,55.8],
+    ["Vendor A", "Software", 12000,9850,14530,13420,-1420,-11.8,"Fluctuating",1748.5565,37.6],
     ["Vendor A", "TOTAL", 37000,27870,45610,32990,"","","","",""],
 
-    ["Vendor B", "Hardware", 24000,17590,29840,27840,-3840,"-16.0%","Fluctuating",4670.8156,"49.4%"],
-    ["Vendor B", "Software", 13500,10230,15210,12090,1410,"+10.4%","Fluctuating",1830.292,"39.0%"],
+    ["Vendor B", "Hardware", 24000,17590,29840,27840,-3840,-16,"Fluctuating",4670.8156,49.4],
+    ["Vendor B", "Software", 13500,10230,15210,12090,1410,10.4,"Fluctuating",1830.292,39],
     ["Vendor B", "TOTAL", 37500,27820,45050,39930,"","","","",""],
 
-    ["Vendor C", "Hardware", 23000,16980,28590,26510,-3510,"-15.3%","Fluctuating",4399.9148,"48.8%"],
-    ["Vendor C", "Software", 11000,9570,13960,11560,-560,"-5.1%","Fluctuating",1583.3568,"38.1%"],
+    ["Vendor C", "Hardware", 23000,16980,28590,26510,-3510,-15.3,"Fluctuating",4399.9148,48.8],
+    ["Vendor C", "Software", 11000,9570,13960,11560,-560,-5.1,"Fluctuating",1583.3568,38.1],
     ["Vendor C", "TOTAL", 34000,26550,42550,38070,"","","","",""],
 ]
 
@@ -668,9 +680,15 @@ df_pmove = pd.DataFrame(data, columns=columns)
 df_pmove = df_pmove.map(lambda x: None if x == "" else x)
 
 num_cols = ["Round 1", "Round 2", "Round 3", "Round 4", "PRICE REDUCTION (VALUE)", "STANDARD DEVIATION"]
+format_dict = {col: format_rupiah for col in num_cols}
+format_dict.update({
+    "PRICE REDUCTION (%)": "{:+.1f}%",
+    "PRICE STABILITY INDEX (%)": "{:.1f}%"
+})
+
 df_pmove_styled = (
     df_pmove.style
-    .format({col: format_rupiah for col in num_cols})
+    .format(format_dict)
     .apply(highlight_total, axis=1)
 )
 
@@ -766,106 +784,118 @@ selected_sheets = st.multiselect(
 
 # Fungsi "Super Button" & Formatting
 def generate_multi_sheet_excel(selected_sheets, df_dict):
-    """
-    Buat Excel multi-sheet dengan formatting:
-    - Sheet 'Bid & Price Analysis' → highlight 1st & 2nd vendor
-    - Sheet lainnya → highlight TOTAL
-    """
+
     output = BytesIO()
 
     with pd.ExcelWriter(output, engine="xlsxwriter") as writer:
         for sheet in selected_sheets:
-            df = df_dict[sheet].copy()
+            df_raw = df_dict[sheet].copy()
 
-            # Identifikasi num cols
-            df_to_write = df.copy()
+            # ===== COERCE NUMERIC SAFELY =====
+            df = df_raw.copy()
             numeric_cols = []
 
             for col in df.columns:
-                try:
-                    df[col] = pd.to_numeric(df[col])
-                except:
-                    continue
-
-                # Jika coercion menghasilkan setidaknya 1 angka → numeric
-                coerced_check = pd.to_numeric(df[col], errors="coerce")
-                if coerced_check.notna().any():
+                coerced = pd.to_numeric(df[col], errors="coerce")
+                if coerced.notna().any():
+                    df[col] = coerced
                     numeric_cols.append(col)
-                    df_to_write[col] = coerced_check
-                else:
-                    df_to_write[col] = df[col]
 
-            # vendor columns (hanya untuk Bid & Price Analysis)
-            vendor_cols = [c for c in numeric_cols] if sheet == "Bid & Price Analysis" else []
+            pct_cols = [c for c in df.columns if "%" in c]
 
-            # Tulis dataframe ke excel 
-            df_to_write.to_excel(writer, index=False, sheet_name=sheet)
+            df.to_excel(writer, index=False, sheet_name=sheet)
             workbook  = writer.book
             worksheet = writer.sheets[sheet]
 
-            # Format
+            # ===== FORMAT =====
             fmt_rupiah = workbook.add_format({"num_format": "#,##0"})
-            fmt_pct    = workbook.add_format({"num_format": '#,##0.0"%"'})
+            fmt_pct    = workbook.add_format({'num_format': '#,##0.0"%"'})
 
-            fmt_total  = workbook.add_format({
+            fmt_total = workbook.add_format({
                 "bold": True,
                 "bg_color": "#D9EAD3",
                 "font_color": "#1A5E20",
                 "num_format": "#,##0"
             })
 
-            fmt_first  = workbook.add_format({"bg_color": "#C6EFCE", "num_format": "#,##0"})
-            fmt_second = workbook.add_format({"bg_color": "#FFEB9C", "num_format": "#,##0"})
+            fmt_first = workbook.add_format({
+                "bg_color": "#C6EFCE",
+                "font_color": "#006100",
+                "num_format": "#,##0"
+            })
 
-            # Format lagii
-            for col_idx, col_name in enumerate(df_to_write.columns):
+            fmt_second = workbook.add_format({
+                "bg_color": "#FFEB9C",
+                "font_color": "#9C6500",
+                "num_format": "#,##0"
+            })
+
+            # ===== COLUMN FORMAT =====
+            for col_idx, col_name in enumerate(df.columns):
                 if col_name in numeric_cols:
                     worksheet.set_column(col_idx, col_idx, 15, fmt_rupiah)
-                if "%" in col_name:
+                if col_name in pct_cols:
                     worksheet.set_column(col_idx, col_idx, 15, fmt_pct)
 
-            # Highlight
-            for row_idx, row in enumerate(df_to_write.itertuples(index=False), start=1):
+            # ===== LOOP DATA =====
+            for row_idx, row in enumerate(df.itertuples(index=False), start=1):
 
-                # Cek apakah baris TOTAL
                 is_total_row = any(
                     isinstance(x, str) and x.strip().upper() == "TOTAL"
                     for x in row
                     if pd.notna(x)
                 )
 
-                # Ambil nama 1st & 2nd vendor (jika sheet Bid & Price Analysis)
+                # Bid & Price vendor index
+                first_idx = second_idx = None
                 if sheet == "Bid & Price Analysis":
-                    first_vendor_name = row[df.columns.get_loc("1st Vendor")]
-                    second_vendor_name = row[df.columns.get_loc("2nd Vendor")]
+                    first_vendor  = row[df.columns.get_loc("1st Vendor")]
+                    second_vendor = row[df.columns.get_loc("2nd Vendor")]
 
-                    first_idx = df.columns.get_loc(first_vendor_name) if first_vendor_name in vendor_cols else None
-                    second_idx = df.columns.get_loc(second_vendor_name) if second_vendor_name in vendor_cols else None
+                    if first_vendor in numeric_cols:
+                        first_idx = df.columns.get_loc(first_vendor)
+                    if second_vendor in numeric_cols:
+                        second_idx = df.columns.get_loc(second_vendor)
 
-                # Loop tiap kolom → apply format
-                for col_idx, col_name in enumerate(df_to_write.columns):
+                for col_idx, col_name in enumerate(df.columns):
                     value = row[col_idx]
                     fmt = None
 
-                    # TOTAL row highlight
-                    if is_total_row and sheet != "Bid & Price Analysis":
+                    # ===== PICK FORMAT =====
+                    if sheet == "Bid & Price Analysis":
+                        if col_idx == first_idx:
+                            fmt = fmt_first
+                        elif col_idx == second_idx:
+                            fmt = fmt_second
+                    elif is_total_row:
                         fmt = fmt_total
 
-                    # Highlight 1st & 2nd vendor
-                    if sheet == "Bid & Price Analysis":
-                        if first_idx is not None and col_idx == first_idx:
-                            fmt = fmt_first
-                        elif second_idx is not None and col_idx == second_idx:
-                            fmt = fmt_second
-
-                    # Replace NaN/inf with empty string
+                    # ===== WRITE CELL (TYPE SAFE) =====
                     if pd.isna(value) or (isinstance(value, float) and np.isinf(value)):
                         worksheet.write_blank(row_idx, col_idx, None, fmt)
+
+                    elif col_name in pct_cols:
+                        worksheet.write_number(
+                            row_idx, col_idx, value, fmt or fmt_pct
+                        )
+
+                    elif col_name in numeric_cols:
+                        worksheet.write_number(
+                            row_idx, col_idx, value, fmt or fmt_rupiah
+                        )
+
                     else:
                         worksheet.write(row_idx, col_idx, value, fmt)
 
+            # ===== AUTOFIT =====
+            for i, col in enumerate(df.columns):
+                worksheet.set_column(
+                    i, i,
+                    max(len(str(col)), df[col].astype(str).map(len).max()) + 2
+                )
+
     output.seek(0)
-    return output
+    return output.getvalue()
 
 # ---- DOWNLOAD BUTTON ----
 if selected_sheets:
