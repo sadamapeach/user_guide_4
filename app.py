@@ -237,7 +237,7 @@ st.markdown(
     """
         <div style="text-align: justify; font-size: 15px; margin-bottom: 25px;">
             Because the order of the rounds directly affects the analysis of 
-            <span style="color: #69FFB4; font-weight: 700;">PRICE MOVEMENT</span>. It is highly recommended to use clear and consistent naming, such as 
+            <span style="color: #38CC8A; font-weight: 700;">PRICE MOVEMENT</span>. It is highly recommended to use clear and consistent naming, such as 
             <span style="background:#FF9A09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">Round 1</span>
             <span style="background:#FF9A09; padding:2px 4px; border-radius:6px; font-weight:600; font-size: 0.75rem; color: black">Round 2</span> 
             and so on.
@@ -820,13 +820,11 @@ def generate_multi_sheet_excel(selected_sheets, df_dict):
 
             fmt_first = workbook.add_format({
                 "bg_color": "#C6EFCE",
-                "font_color": "#006100",
                 "num_format": "#,##0"
             })
 
             fmt_second = workbook.add_format({
                 "bg_color": "#FFEB9C",
-                "font_color": "#9C6500",
                 "num_format": "#,##0"
             })
 
